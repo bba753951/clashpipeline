@@ -1,25 +1,5 @@
 #!/bin/bash
 
-
-# ---------------------------------------
-# -h option
-function usage(){
-cat << -EOF-
-Usage: 
-    $0 -i inputfile -o outfile -m mismatch -r reference -b -c count -n score
-Options:
-    -h display this help and exit
-    -i input file
-    -o output file
-    -m mismatch count
-    -r reference file
-    -b bowtie-build or not
-    -c select read count(more then)
-    -n select rnafold score(less then)
--EOF-
-exit 1
-}
-
 function createDir(){
     if [ ! -d $1  ]; then
           mkdir -p $1

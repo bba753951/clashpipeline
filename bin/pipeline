@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 shell_folder=$(cd "$(dirname "$0")";pwd)
 . ${shell_folder}/framefunction.sh
@@ -267,4 +267,4 @@ if [ $genefile ];then
     echo step7 done
 fi
 
-#rm -rf RNA_w25_u1.out step1.csv step2.csv step3.csv step4.csv step5.csv 
+rm -rf RNA_w25_u1.out step1.csv step2.csv step3.csv step4.csv step5.csv 
