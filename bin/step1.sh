@@ -6,7 +6,6 @@
 shell_folder=$(cd "$(dirname "$0")";pwd)
 project_folder=$(dirname $shell_folder)
 . ${shell_folder}/framefunction.sh
-trim_galore=${project_folder}/TrimGalore-0.6.5/trim_galore
 
 
 
@@ -106,5 +105,5 @@ echo ------------------------------
 trimmed_input=$(basename ${input%.*})"_trimmed.fq"
 echo $trimmed_input
 
-$trim_galore --length $length --dont_gzip -a $trimmed_seq $input 
+trim_galore --length $length --dont_gzip -a $trimmed_seq $input 
 awk -f ${shell_folder}/sequence.awk $trimmed_input |sort| uniq -c |awk -v OFS="," 'BEGIN{print "sequence,read_count"}{print $2,$1}' > $output
