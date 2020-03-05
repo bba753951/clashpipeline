@@ -27,7 +27,7 @@ outfile=step6.csv
 function usage(){
 cat << -EOF-
 Usage: 
-    $0 -i <input> -o <output> -t <original regulator file> -r <original transcript file> -p <GU_targeting_score> -u <RNAup_score> -f <RNAfold_MFE>
+    $0 -i <input> -o <output> -r <original regulator file> -t <original transcript file> -p <GU_targeting_score> -u <RNAup_score> -f <RNAfold_MFE>
 Options:
     -h display this help and exit
 

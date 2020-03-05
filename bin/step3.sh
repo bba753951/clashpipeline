@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#time bash step3.sh -i ~/pra/input/piRNA1000.csv -o step3.csv -r pra2.csv -m 0 -L 15 -b 1
+#time bash step3.sh -i ~/pra/input/piRNA1000.csv -o step3.csv -r step2.csv -m 0 -L 15 -b 1
 
 shell_folder=$(cd "$(dirname "$0")";pwd)
 . ${shell_folder}/framefunction.sh
@@ -104,8 +104,9 @@ fi
 # ---------------------------------------
 ref=${refile%.*}
 inp=${infile%.*}
-base_ref=$(basename $ref)
-base_inp=$(basename $inp)
+# awk can't not read file name inclue "="
+base_ref=$(basename $ref|sed 's/=/_/g')
+base_inp=$(basename $inp|sed 's/=/_/g')
 bowtie_path=bowtieFile
 id_file_in="idFile/${base_inp}.csv"
 id_file_ref="idFile/${base_ref}.csv"

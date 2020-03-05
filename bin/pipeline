@@ -38,13 +38,13 @@ Options:
     -f hybrid file(fastq)
 
     -t transcript file(csv)
-       (must have "transcript_name" or "sequence" column name)
+       (must have "transcript_name" and "sequence" column name)
 
     -r regulator file(csv)
-       (must have "regulator_name" or "sequence" column name)
+       (must have "regulator_name" and "sequence" column name)
 
     -g Gene to transcript file(csv)
-       (must have "transcript_name" or "Gene_name" column name)
+       (must have "transcript_name" and "Gene_name" column name)
 
     -a adaptor sequence
        (for trim_galore parameter)
@@ -190,10 +190,6 @@ if [ ! $regfile ];then
     exit 1
 fi
 
-if [ ! $genefile ];then
-    echo "you need to input '-g <gene to transcript file>'"
-    exit 1
-fi
 
 if [ ! $adaptor ];then
     echo "you need to input '-a <adaptor>'"
@@ -205,14 +201,12 @@ fi
 checkFile $fastqfile
 checkFile $tranfile
 checkFile $regfile
-checkFile $genefile
 
 # check the \n format,if file from dos
 # use dos2unix
 checkNewline $fastqfile
 checkNewline $tranfile
 checkNewline $regfile
-checkNewline $genefile
 
 
 
@@ -236,10 +230,10 @@ cut -d, -f $reg_col $regfile > original_name/$base_reg
 
 
 echo step1 start
-time bash ${shell_folder}/step1.sh -i $fastqfile -o step1.csv -l $read_len -a ${adaptor}
+#time bash ${shell_folder}/step1.sh -i $fastqfile -o step1.csv -l $read_len -a ${adaptor}
 echo step1 done
 
-time bash ${shell_folder}/step2.sh -i step1.csv -o step2.csv -T $read_count -M $RNAfold_MFE
+#time bash ${shell_folder}/step2.sh -i step1.csv -o step2.csv -T $read_count -M $RNAfold_MFE
 echo step2 done
 
 time bash ${shell_folder}/step3.sh -i $regfile -o step3.csv -r step2.csv -m $reg_hyb_mis -L ${remain_len} -b $reg_hyb_bowtie
@@ -262,6 +256,8 @@ time bash ${shell_folder}/step6.sh -i step5.csv -o $outfile -t original_name/${b
 echo step6 done
 
 if [ $genefile ];then
+    checkFile $genefile
+    checkNewline $genefile
     echo run step7 
     time bash ${shell_folder}/step7.sh -i $outfile -o ${out}_gene.csv -G ${genefile}
     echo step7 done
