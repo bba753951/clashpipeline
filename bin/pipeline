@@ -228,12 +228,16 @@ reg_col=$?
 cut -d, -f $tran_col $tranfile > original_name/$base_tran
 cut -d, -f $reg_col $regfile > original_name/$base_reg
 
+# for upload name file
+#cut -d, -f $tran_col $tranfile |awk '{printf "%s,",$1}END{printf "\n"}'> original_name/upload.csv
+#cut -d, -f $reg_col $regfile |awk '{printf "%s,",$1}END{printf "\n"}' >> original_name/upload.csv
+
 
 echo step1 start
-#time bash ${shell_folder}/step1.sh -i $fastqfile -o step1.csv -l $read_len -a ${adaptor}
+time bash ${shell_folder}/step1.sh -i $fastqfile -o step1.csv -l $read_len -a ${adaptor}
 echo step1 done
 
-#time bash ${shell_folder}/step2.sh -i step1.csv -o step2.csv -T $read_count -M $RNAfold_MFE
+time bash ${shell_folder}/step2.sh -i step1.csv -o step2.csv -T $read_count -M $RNAfold_MFE
 echo step2 done
 
 time bash ${shell_folder}/step3.sh -i $regfile -o step3.csv -r step2.csv -m $reg_hyb_mis -L ${remain_len} -b $reg_hyb_bowtie
