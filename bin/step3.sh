@@ -102,14 +102,15 @@ fi
 
 # path/file
 # ---------------------------------------
+temp_path=$(dirname $outfile)
 ref=${refile%.*}
 inp=${infile%.*}
 # awk can't not read file name inclue "="
 base_ref=$(basename $ref|sed 's/=/_/g')
 base_inp=$(basename $inp|sed 's/=/_/g')
-bowtie_path=bowtieFile
-id_file_in="idFile/${base_inp}.csv"
-id_file_ref="idFile/${base_ref}.csv"
+bowtie_path=${temp_path}/bowtieFile
+id_file_in="${temp_path}/idFile/${base_inp}.csv"
+id_file_ref="${temp_path}/idFile/${base_ref}.csv"
 bowtie_extract=$bowtie_path/Reads_col.bwt
 
 
@@ -125,8 +126,8 @@ checkNewline $refile
 
 # check dir exist or not 
 # if not,create one
-createDir bowtieFile
-createDir idFile
+createDir ${temp_path}/bowtieFile
+createDir ${temp_path}/idFile
 
 # transfer csv file to fasta file
 # at same Dir
@@ -140,15 +141,20 @@ csvTofasta $refile hybrid sequence
 addID $infile regulator $id_file_in
 addID $refile hybrid $id_file_ref
 
+# for CPU
+CPU_num
+cpu_num=$?
+echo -------------USE CPU number : ${cpu_num} ----------------
+
 # bowtie
 if [ "$bflag" = "1" ]
 then
-    bowtie-build $ref".fasta" "$bowtie_path/$base_ref.fa" 
+    bowtie-build --threads $cpu_num $ref".fasta" "$bowtie_path/$base_ref.fa" 
 else
     echo "you don't use bowtie-build"
 fi
 
-bowtie -f -a -v $mismatch --norc $bowtie_path/$base_ref".fa" $inp".fasta" $bowtie_path/Reads.bwt
+bowtie --threads $cpu_num -f -a -v $mismatch --norc $bowtie_path/$base_ref".fa" $inp".fasta" $bowtie_path/Reads.bwt
 
 # check the bowtie output is empty or not
 declare -i line=0
@@ -175,8 +181,8 @@ fi
 
 # merge
 echo "---------merge file-------------"
-merge_reg="merge_reg_${base_inp}.csv"
-merge_hyb="merge_hyb_${base_inp}.csv"
+merge_reg="${temp_path}/merge_reg_${base_inp}.csv"
+merge_hyb="${temp_path}/merge_hyb_${base_inp}.csv"
 
 # merge regulator file 
 merge_csv $id_file_in 1 $bowtie_extract 1 $merge_reg

@@ -61,7 +61,7 @@ function rnaup(RNA_slice_seq, input_seq, RNA_start, RNA_seq, RNA_len, input_len,
     #print "rnaup"
     sequence=RNA_slice_seq"\\&"input_seq
     #print sequence
-    cmd="echo "sequence" | RNAup -b -d2 --noLP -c 'S' -"
+    cmd="echo "sequence" | RNAup -o -b -d2 --noLP -c 'S' -"
     count=1
 
     # get RNAup result
@@ -199,7 +199,7 @@ function rnaup_score(RNA_seq, RNA_len, RNA_start, RNA_end, input_seq, old,up_res
 
 
     sequence=slice_RNA"\\&"input_seq
-    cmd="echo "sequence" | RNAup -b -d2 --noLP -c 'S' -"
+    cmd="echo "sequence" | RNAup -o -b -d2 --noLP -c 'S' -"
     count=1
 
     # get RNAup result

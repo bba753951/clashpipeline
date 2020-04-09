@@ -108,6 +108,7 @@ checkFile $infile
 checkNewline $infile
 
 
+temp_path=$(dirname $outfile)
 
 find_col transcript_seq $infile 
 RNA_seq=$?
@@ -143,41 +144,41 @@ remain_col=$?
 echo ------- rnaup start ---------------
 
 # add new cloumn name to output
-head -n 1 $infile | sed 's/$/,RNAup_score,RNAup_pos,RNAup_target_seq,RNAup_input_seq/' > temp1.csv
+head -n 1 $infile | sed 's/$/,RNAup_score,RNAup_pos,RNAup_target_seq,RNAup_input_seq/' > ${temp_path}/temp1.csv
 # remove first row
 #sed -i '1d' $infile
 
 
 if [ "$pflag" = "1" ];then
     echo --------- use parallel -----------------
-    cat $infile|sed '1d'|parallel --pipe --block 0.5M  awk -v RNA_seq=$RNA_seq -v input_seq=$input_seq -v remain_seq=$remain_seq -v remain_RNA_pos=$remain_RNA_pos -v RNA_len=$RNA_len -v input_len=$input_len -v remain_len=$remain_len -f ${shell_folder}/rnaup.awk  >> temp1.csv
+    cat $infile|sed '1d'|parallel --pipe --block 0.5M  awk -v RNA_seq=$RNA_seq -v input_seq=$input_seq -v remain_seq=$remain_seq -v remain_RNA_pos=$remain_RNA_pos -v RNA_len=$RNA_len -v input_len=$input_len -v remain_len=$remain_len -f ${shell_folder}/rnaup.awk  >> ${temp_path}/temp1.csv
 else
     echo ---------not use parallel -----------------
-    cat $infile|sed '1d'|awk -v RNA_seq=$RNA_seq -v input_seq=$input_seq -v remain_seq=$remain_seq -v remain_RNA_pos=$remain_RNA_pos -v RNA_len=$RNA_len -v input_len=$input_len -v remain_len=$remain_len -f ${shell_folder}/rnaup.awk  >> temp1.csv
+    cat $infile|sed '1d'|awk -v RNA_seq=$RNA_seq -v input_seq=$input_seq -v remain_seq=$remain_seq -v remain_RNA_pos=$remain_RNA_pos -v RNA_len=$RNA_len -v input_len=$input_len -v remain_len=$remain_len -f ${shell_folder}/rnaup.awk  >> ${temp_path}/temp1.csv
 fi
 
 
 
 if [ "$sRnaScore" != "None" ];then
     echo "choose RNAup_score <= $sRnaScore"
-    selectSmaller RNAup_score $sRnaScore temp1.csv temp.csv
-    rm temp1.csv
+    selectSmaller RNAup_score $sRnaScore ${temp_path}/temp1.csv ${temp_path}/temp.csv
+    rm ${temp_path}/temp1.csv
 else
-    mv temp1.csv temp.csv
+    mv ${temp_path}/temp1.csv ${temp_path}/temp.csv
 fi
 
 
 if [ "$gflag" = "1" ];then
 
     echo ----------- use GU -------------
-    time python3 ${shell_parent}/GU_targeting_algorithm/self_gu.py temp.csv 
-    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  temp_gu.csv|cut -d, -f $RNA_seq --complement > $outfile
-    rm temp.csv temp_gu.csv
+    time python3 ${shell_parent}/GU_targeting_algorithm/self_gu.py ${temp_path}/temp.csv 
+    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  ${temp_path}/temp_gu.csv|cut -d, -f $RNA_seq --complement > $outfile
+    rm ${temp_path}/temp.csv ${temp_path}/temp_gu.csv
 
 else 
     echo ----------- not use GU -------------
 
-    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  temp.csv|cut -d, -f $RNA_seq --complement > $outfile
-    rm temp.csv
+    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  ${temp_path}/temp.csv|cut -d, -f $RNA_seq --complement > $outfile
+    rm ${temp_path}/temp.csv
 fi
 

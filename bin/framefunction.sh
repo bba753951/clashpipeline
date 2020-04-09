@@ -1,5 +1,14 @@
 #!/bin/bash
 
+
+function CPU_num(){
+    declare -i cpu_num=$(cat /proc/cpuinfo | grep "processor" | wc -l)   
+    if [ $cpu_num -ge 4 ];then
+        cpu_num=$cpu_num-2
+    fi
+    return $cpu_num
+}
+
 function createDir(){
     if [ ! -d $1  ]; then
           mkdir -p $1

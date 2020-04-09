@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#set -u -e
 # example
 #time bash step1.sh -i SRR6512653.fastq -o pra1.csv -l 17 -a AGATCGGAAGAG
 
@@ -83,6 +83,7 @@ if [ ! $input ];then
     exit 1
 fi
 
+temp_path=$(dirname $output)
 
 # check file/directory exist
 checkFile $input
@@ -105,5 +106,5 @@ echo ------------------------------
 trimmed_input=$(basename ${input%.*})"_trimmed.fq"
 echo $trimmed_input
 
-trim_galore --length $length --dont_gzip -a $trimmed_seq $input 
-awk -f ${shell_folder}/sequence.awk $trimmed_input |sort| uniq -c |awk -v OFS="," 'BEGIN{print "sequence,read_count"}{print $2,$1}' > $output
+trim_galore --length $length --dont_gzip -a $trimmed_seq -o $temp_path $input 
+awk -f ${shell_folder}/sequence.awk ${temp_path}"/"$trimmed_input |sort| uniq -c |awk -v OFS="," 'BEGIN{print "sequence,read_count"}{print $2,$1}' > $output

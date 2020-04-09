@@ -92,7 +92,7 @@ checkNewline $infile
 
 infile_sc=${infile%.*}"_Src.csv"
 infile_fold=${infile%.*}"_fold.csv"
-
+temp_path=$(dirname $outfile)
 # select Read count
 # ---------------------------------------
 if [ "$sReadcount" != "None" ];then

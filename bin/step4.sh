@@ -97,15 +97,16 @@ fi
 
 # path/file
 # ---------------------------------------
+temp_path=$(dirname $outfile)
 ref=${refile%.*}
 inp=${infile%.*}
 base_ref=$(basename $ref)
 base_inp=$(basename $inp)
-bowtie_path=bowtieFile
-id_file_in="idFile/${base_inp}.csv"
-id_file_ref="idFile/${base_ref}.csv"
+bowtie_path=${temp_path}/bowtieFile
+id_file_in="${temp_path}/idFile/${base_inp}.csv"
+id_file_ref="${temp_path}/idFile/${base_ref}.csv"
 bowtie_extract=$bowtie_path/Reads_col2.bwt
-merge_RNA="merge_"${base_ref}".csv"
+merge_RNA=${temp_path}"/merge_"${base_ref}".csv"
 
 
 
@@ -120,19 +121,26 @@ checkNewline $refile
 
 # check dir exist or not 
 # if not,create one
-createDir bowtieFile
-createDir idFile
+createDir ${temp_path}/bowtieFile
+createDir ${temp_path}/idFile
 
 # transfer csv file to fasta file
 # at same Dir
 csvTofasta $refile transcript sequence 
+
+
+# for CPU
+CPU_num
+cpu_num=$?
+echo -------------USE CPU number : ${cpu_num} ----------------
+
 
 find_col remain0 $infile
 remain_id_col=$?
 find_col remain_seq $infile
 remain_seq_col=$?
 
-awk -F, -v id=$remain_id_col -v seq=$remain_seq_col 'NR==1 {next}{printf ">%s\n%s\n",$id,$seq}' $infile | sed "s/U/T/g" > ${base_inp}".fasta" 
+awk -F, -v id=$remain_id_col -v seq=$remain_seq_col 'NR==1 {next}{printf ">%s\n%s\n",$id,$seq}' $infile | sed "s/U/T/g" > ${temp_path}"/"${base_inp}".fasta" 
 
 
 
@@ -146,12 +154,12 @@ addID $refile transcript $id_file_ref
 echo "----------bowtie-----------------"
 if [ "$bflag" = "1" ]
 then
-    bowtie-build $ref".fasta" "${bowtie_path}/${base_ref}.fa" 
+    bowtie-build --threads $cpu_num $ref".fasta" "${bowtie_path}/${base_ref}.fa" 
 else
     echo "you don't use bowtie-build"
 fi
 
-bowtie -f -a -v $mismatch --norc ${bowtie_path}/${base_ref}".fa" ${base_inp}".fasta" $bowtie_path/Reads2.bwt
+bowtie --threads $cpu_num -f -a -v $mismatch --norc ${bowtie_path}/${base_ref}".fa" ${temp_path}"/"${base_inp}".fasta" $bowtie_path/Reads2.bwt
 
 
 # check the bowtie output is empty or not
@@ -188,5 +196,5 @@ RNA_remain_col=$?
 merge_csv $infile $remain_id_col $merge_RNA $RNA_remain_col $outfile
 
 
-rm ${base_inp}".fasta" ${ref}".fasta" $merge_RNA
+rm ${temp_path}"/"${base_inp}".fasta" ${ref}".fasta" $merge_RNA
 

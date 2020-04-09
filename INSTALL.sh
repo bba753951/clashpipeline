@@ -3,13 +3,21 @@
 
 
 shell_folder=$(cd "$(dirname "$0")";pwd)
+env_path=$shell_folder/env_path.sh
+
+if [ -e $env_path ];then
+    . $env_path
+else 
+    touch $env_path
+fi
 
 echo $PATH|grep "\.local/bin:"
 if [ "$?" = "1" ];then
     echo add $HOME/.local/bin to PATH
     export PATH=$HOME/.local/bin:$PATH
-    echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.profile
-    source $HOME/.profile
+    echo 'export PATH=$HOME/.local/bin:$PATH' >> $env_path
+    #echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.profile
+    #source $HOME/.profile
 fi
 
 
@@ -65,8 +73,12 @@ else
     echo "install trim_galore"
     wget -O trim_galore.tar.gz https://github.com/FelixKrueger/TrimGalore/archive/0.6.5.tar.gz
     tar xvzf trim_galore.tar.gz
-    echo "export PATH=${shell_folder}/TrimGalore-0.6.5:"'$PATH' >> $HOME/.profile
-    source $HOME/.profile
+
+    # use '' to let $ not turn to var
+    echo "export PATH=${shell_folder}/TrimGalore-0.6.5:"'$PATH' >> $env_path
+    export PATH=${shell_folder}/TrimGalore-0.6.5:$PATH
+    #echo "export PATH=${shell_folder}/TrimGalore-0.6.5:"'$PATH' >> $HOME/.profile
+    #source $HOME/.profile
 
     if [ ! -x "$(which trim_galore)" ]; then
         echo you need to install trim_galore by yourself
@@ -91,8 +103,10 @@ else
     echo "install bowtie"
     wget -O bowtie-1.2.3-linux-x86_64.zip https://sourceforge.net/projects/bowtie-bio/files/bowtie/1.2.3/bowtie-1.2.3-linux-x86_64.zip/download
     unzip bowtie-1.2.3-linux-x86_64.zip 
-    echo "export PATH=${shell_folder}/bowtie-1.2.3-linux-x86_64:"'$PATH' >> $HOME/.profile
-    source $HOME/.profile
+    export PATH=${shell_folder}/bowtie-1.2.3-linux-x86_64:$PATH
+    echo "export PATH=${shell_folder}/bowtie-1.2.3-linux-x86_64:"'$PATH' >> $env_path
+    #echo "export PATH=${shell_folder}/bowtie-1.2.3-linux-x86_64:"'$PATH' >> $HOME/.profile
+    #source $HOME/.profile
 
     if [ ! -x "$(which bowtie)" ]; then
         echo you need to install bowtie by yourself
@@ -121,8 +135,10 @@ else
     cd ViennaRNA-2.4.14
     ./configure --prefix=${shell_folder}/ViennaRNA
     make install
-    echo "export PATH=${shell_folder}/ViennaRNA/bin:"'$PATH' >> $HOME/.profile
-    source $HOME/.profile
+    export PATH=${shell_folder}/ViennaRNA/bin:$PATH
+    echo "export PATH=${shell_folder}/ViennaRNA/bin:"'$PATH' >> $env_path
+    #echo "export PATH=${shell_folder}/ViennaRNA/bin:"'$PATH' >> $HOME/.profile
+    #source $HOME/.profile
 
     if [ ! -x "$(which RNAup)" ]; then
         echo you need to install ViennaRNA by yourself
@@ -130,6 +146,6 @@ else
     fi
 fi
 
-echo 'Please run "source ~/.profile" to source your profile'
-echo "(press any key to continue...)"
-read -n 1 key; echo
+#echo 'Please run "source ~/.profile" to source your profile'
+#echo "(press any key to continue...)"
+#read -n 1 key; echo

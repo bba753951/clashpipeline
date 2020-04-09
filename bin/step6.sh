@@ -130,6 +130,7 @@ checkNewline $infile
 checkNewline $regfile
 checkNewline $tranfile
 
+temp_path=$(dirname $outfile)
 
 
 if [ "$piScore" != "None" ];then
@@ -185,15 +186,15 @@ fi
 
 
 
-cut -d, -f $input_col,$RNA_col $outfile|sed '1d'|LC_ALL=C sort -u |sed '1i new line'> t.csv
+cut -d, -f $input_col,$RNA_col $outfile|sed '1d'|LC_ALL=C sort -u |sed '1i new line'> ${temp_path}/t.csv
 if [ $input_col -lt $RNA_col ];then
-    awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk t.csv|LC_ALL=C sort -k 1,1>temp_transcript_regulator.csv
-    awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk t.csv|LC_ALL=C sort -k 1,1>temp_regulator_transcript.csv
-    rm t.csv
+    awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk ${temp_path}/t.csv|LC_ALL=C sort -k 1,1>${temp_path}/temp_transcript_regulator.csv
+    awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk ${temp_path}/t.csv|LC_ALL=C sort -k 1,1>${temp_path}/temp_regulator_transcript.csv
+    rm ${temp_path}/t.csv
 else 
-    awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk t.csv|LC_ALL=C sort -k 1,1>temp_transcript_regulator.csv
-    awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk t.csv|LC_ALL=C sort -k 1,1>temp_regulator_transcript.csv
-    rm t.csv
+    awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk ${temp_path}/t.csv|LC_ALL=C sort -k 1,1>${temp_path}/temp_transcript_regulator.csv
+    awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk ${temp_path}/t.csv|LC_ALL=C sort -k 1,1>${temp_path}/temp_regulator_transcript.csv
+    rm ${temp_path}/t.csv
 fi
 
 

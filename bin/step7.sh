@@ -86,6 +86,7 @@ checkNewline $infile
 checkNewline $genefile
 
 
+temp_path=$(dirname $outfile)
 
 find_col Gene_name $genefile
 source_geneID_col=$?
@@ -109,16 +110,16 @@ regulator_col=$?
 find_col transcript_name $infile 
 transcript_col=$?
 
-awk -F, -v key=$source_geneID_col -v value=$source_RNA_col  -f ${shell_folder}/key_value.awk $genefile|LC_ALL=C sort>temp_gene_RNA.csv
+awk -F, -v key=$source_geneID_col -v value=$source_RNA_col  -f ${shell_folder}/key_value.awk $genefile|LC_ALL=C sort>${temp_path}/temp_gene_RNA.csv
 
 
 if [ $regulator_col -lt $transcript_col ];then
-    cut -d, -f $regulator_col,$transcript_col $infile |LC_ALL=C sort -u|awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk |LC_ALL=C sort>temp_RNA_regultor.csv
+    cut -d, -f $regulator_col,$transcript_col $infile |LC_ALL=C sort -u|awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk |LC_ALL=C sort>${temp_path}/temp_RNA_regultor.csv
 else 
-    cut -d, -f $regulator_col,$transcript_col $infile |LC_ALL=C sort -u|awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk |LC_ALL=C sort>temp_RNA_regultor.csv
+    cut -d, -f $regulator_col,$transcript_col $infile |LC_ALL=C sort -u|awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk |LC_ALL=C sort>${temp_path}/temp_RNA_regultor.csv
 fi
-awk -F, -f ${shell_folder}/gene_tran_reg.awk temp_RNA_regultor.csv temp_gene_RNA.csv > $outfile
+awk -F, -f ${shell_folder}/gene_tran_reg.awk ${temp_path}/temp_RNA_regultor.csv ${temp_path}/temp_gene_RNA.csv > $outfile
 
 
-rm temp_RNA_regultor.csv temp_gene_RNA.csv
+rm ${temp_path}/temp_RNA_regultor.csv ${temp_path}/temp_gene_RNA.csv
 
