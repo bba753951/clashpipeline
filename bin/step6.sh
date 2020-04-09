@@ -207,11 +207,11 @@ fi
 
 echo "transcript_name,regulator_sum,regulator_name" > ${out}_transcript_regulator.csv
 
-
-cut -d, -f $tran_col $tranfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 | join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - temp_transcript_regulator.csv >> ${out}_transcript_regulator.csv
+# join also need LC_ALL
+cut -d, -f $tran_col $tranfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 |LC_ALL=C join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - ${temp_path}/temp_transcript_regulator.csv >> ${out}_transcript_regulator.csv
 
 echo "regulator_name,transcript_sum,transcript_name" > ${out}_regulator_transcript.csv
-cut -d, -f $reg_col $regfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 | join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - temp_regulator_transcript.csv >> ${out}_regulator_transcript.csv
+cut -d, -f $reg_col $regfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 |LC_ALL=C join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - ${temp_path}/temp_regulator_transcript.csv >> ${out}_regulator_transcript.csv
 
 #rm temp_transcript_regulator.csv temp_regulator_transcript.csv
 

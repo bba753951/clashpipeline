@@ -131,7 +131,7 @@ function merge_csv(){
     LC_ALL=C sort -t, -k $file1_col,$file1_col -o $file1 $file1
     LC_ALL=C sort -t, -k $file2_col,$file2_col -o $file2 $file2
 
-    join -t, -1 $file1_col -2 $file2_col $file1 $file2 > $outfile
+    LC_ALL=C join -t, -1 $file1_col -2 $file2_col $file1 $file2 > $outfile
 
 }
 
