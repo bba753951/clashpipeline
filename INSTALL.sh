@@ -146,6 +146,6 @@ else
     fi
 fi
 
-#echo 'Please run "source ~/.profile" to source your profile'
-#echo "(press any key to continue...)"
-#read -n 1 key; echo
+echo "Please add \"${shell_folder}/bin\" to your PATH"
+echo "(press any key to continue...)"
+read -n 1 key; echo
