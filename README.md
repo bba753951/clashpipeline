@@ -29,11 +29,11 @@ See Install_By_Yourself detail
 3. try "pipeline -h" 
 4. must have option
 ```shell=
-pipeline -f <fastqfile> -t <transcript file> -r <regulator file> 
+pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS] 
 ```
 
 ## Options
-*     -h display this help and exit
+*    -h display this help and exit
 
 *    -f (must use) hybrid file(fastq)
 
@@ -99,7 +99,7 @@ pipeline -f <fastqfile> -t <transcript file> -r <regulator file>
        (you can only use 0,1,2)
        default 0
 
-*     -p use parallel to increase speed.
+*    -p use parallel to increase speed.
        if you want to use this option,make sure you have already installed "parellel"
        sudo apt-get install parallel
        1 for use,0 for not use
