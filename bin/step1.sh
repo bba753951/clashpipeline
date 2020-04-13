@@ -74,10 +74,10 @@ do
 	esac
 done
 
-if [ ! $trimmed_seq ];then
-    echo "you need to input '-a <adaptor>'"
-    exit 1
-fi
+#if [ ! $trimmed_seq ];then
+    #echo "you need to input '-a <adaptor>'"
+    #exit 1
+#fi
 
 if [ ! $input ];then
     echo "you need to input '-i <input>'"
