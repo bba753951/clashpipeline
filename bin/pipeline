@@ -293,4 +293,4 @@ fi
 mv ${temp_path}/step5.csv ${original_name}/original.csv
 zip -r ${temp_path}/upload.zip ${original_name}/*
 
-rm -r ${temp_path}/step1.csv s${temp_path}/tep2.csv ${temp_path}/step3.csv ${temp_path}/step4.csv 
+rm -r ${temp_path}/step1.csv s${temp_path}/step2.csv ${temp_path}/step3.csv ${temp_path}/step4.csv ${temp_path}/original_name 
