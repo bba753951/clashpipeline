@@ -18,7 +18,7 @@ fi
 
 # default parameter
 #-----------------------------------
-length=0
+length=17
 output="step1.csv"
 
 
@@ -38,9 +38,10 @@ Options:
        default step1.csv
 
     -l length(greater equal)
-       default 0
+       default 17
 
     -a Adaptor for trim_galore
+       If not specified,trim_galore will auto detect.
 -EOF-
 exit 1
 }
@@ -106,5 +107,13 @@ echo ------------------------------
 trimmed_input=$(basename ${input%.*})"_trimmed.fq"
 echo $trimmed_input
 
-trim_galore --length $length --dont_gzip -a $trimmed_seq -o $temp_path $input 
+
+
+
+if [ ! $trimmed_seq ];then
+    trim_galore --length $length --dont_gzip -o $temp_path $input 
+else
+    trim_galore --length $length --dont_gzip -a $trimmed_seq -o $temp_path $input 
+fi
+
 awk -f ${shell_folder}/sequence.awk ${temp_path}"/"$trimmed_input |sort| uniq -c |awk -v OFS="," 'BEGIN{print "sequence,read_count"}{print $2,$1}' > $output
