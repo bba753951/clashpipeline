@@ -9,7 +9,7 @@ This program need to use "trim_galore","bowtie","RNAup","RNAfold" program.
 You can choose one of following options to intall these programs.
 ## 1. Install from script
 ```shell=
-bash INSTALL.sh
+./INSTALL.sh
 ```
 ## 2. Install by docker 
 ubuntu:16.04
@@ -20,7 +20,7 @@ docker pull bba753951/clashpipeline:v10
 
 
 ## 3. Install by yourself
-See Install_By_Yourself detail
+See Install_By_Yourself.md detail
 
 
 # Usage
@@ -52,10 +52,10 @@ pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS]
 *    -o output file name
        (will have following output)
        outfile,
-       OUTPUT_hybrid_transcript.csv
+       OUTPUT_hybrid_transcript.csv,
        OUTPUT_regulator_transcript.csv,
        OUTPUT_transcript_regulator.csv,
-       OUTPUT_gene.csv(if you use -g \<gene to transcript file>)
+       OUTPUT_gene.csv(if you use -g \<gene to transcript file>),
        default output.csv
 
 *    -l select hybrid read length(greater equal)
@@ -100,7 +100,7 @@ pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS]
        default 0
 
 *    -p use parallel to increase speed.
-       if you want to use this option,make sure you have already installed "parellel"
+       if you want to use this option,make sure you have already installed "parallel"
        sudo apt-get install parallel
        1 for use,0 for not use
        default 0
