@@ -9,7 +9,7 @@ This program need to use "trim_galore","bowtie","RNAup","RNAfold" program.
 You can choose one of following options to intall these programs.
 ## 1. Install from script
 ```shell=
-./INSTALL.sh
+bash INSTALL.sh
 ```
 ## 2. Install by docker 
 ubuntu:16.04
@@ -20,7 +20,7 @@ docker pull bba753951/clashpipeline:v10
 
 
 ## 3. Install by yourself
-See Install_By_Yourself.md detail
+See Install_By_Yourself detail
 
 
 # Usage
@@ -29,7 +29,7 @@ See Install_By_Yourself.md detail
 3. try "pipeline -h" 
 4. must have option
 ```shell=
-pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS] 
+pipeline -f <fastqfile> -t <transcript file> -r <regulator file> 
 ```
 
 ## Options
@@ -52,10 +52,10 @@ pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS]
 *    -o output file name
        (will have following output)
        outfile,
-       OUTPUT_hybrid_transcript.csv,
+       OUTPUT_hybrid_transcript.csv
        OUTPUT_regulator_transcript.csv,
        OUTPUT_transcript_regulator.csv,
-       OUTPUT_gene.csv(if you use -g \<gene to transcript file>),
+       OUTPUT_gene.csv(if you use -g \<gene to transcript file>)
        default output.csv
 
 *    -l select hybrid read length(greater equal)
@@ -100,7 +100,39 @@ pipeline -f <fastqfile> -t <transcript file> -r <regulator file> [OPTIONS]
        default 0
 
 *    -p use parallel to increase speed.
-       if you want to use this option,make sure you have already installed "parallel"
+       if you want to use this option,make sure you have already installed "parellel"
        sudo apt-get install parallel
        1 for use,0 for not use
        default 0
+
+## Use Example Data to Run
+1. download example data from [here](http://cosbi7.ee.ncku.edu.tw/master_project/master_media/usage_example.zip)
+
+2. unzip the usage_example.zip
+3. run program
+```shell=
+pipeline -r reg_file.csv -f hyb_file.fastq -t tran_file.csv
+```
+### Output File Format
+For example: you use -o output.csv 
+
+1. output.csv
+2. output_hybrid_transcript.csv
+    > hybrid_seq,transcript_sum,transcript_name
+3. output_regulator_transcript.csv
+    > regulator_name,transcript_sum,transcript_name
+4. output_transcript_regulator.csv
+    > transcript_name,regulator_sum,regulator_name
+5. output_gene.csv
+    >Gene_name,counts_of_transcripts,transcript_name,counts_of_r    egulators,regulator_name
+
+
+trim_galore info
+1. hyb_file_trimmed.fq
+2. hyb_file.fastq_trimming_report.txt
+
+directory
+1. bowtieFile
+    to store the bowtie result and reference
+2. idFile
+    to store id name(we created)

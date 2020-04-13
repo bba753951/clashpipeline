@@ -3,7 +3,7 @@
 
 BEGIN {
 	OFS=","
-    print "Gene_name","#of_RNA_transcripts","transcript_name","#of_piRNA_regulators","regulator_name"
+    print "Gene_name","counts_of_transcripts","transcript_name","counts_of_regulators","regulator_name"
 
 }
 FILENAME==ARGV[1]{
