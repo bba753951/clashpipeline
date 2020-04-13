@@ -25,7 +25,7 @@ See Install_By_Yourself.md detail
 
 # Usage
 1. unzip the package 
-2. add the {path_to_clashpipeline/bin} to your path
+2. add the {path_to_clashpipeline/bin} to your PATH
 3. try "pipeline -h" 
 4. must have option
 ```shell=

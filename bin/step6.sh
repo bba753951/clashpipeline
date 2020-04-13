@@ -213,5 +213,5 @@ cut -d, -f $tran_col $tranfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 |LC_ALL=C join 
 echo "regulator_name,transcript_sum,transcript_name" > ${out}_regulator_transcript.csv
 cut -d, -f $reg_col $regfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 |LC_ALL=C join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - ${temp_path}/temp_regulator_transcript.csv >> ${out}_regulator_transcript.csv
 
-#rm temp_transcript_regulator.csv temp_regulator_transcript.csv
+rm ${temp_path}/temp_transcript_regulator.csv ${temp_path}/temp_regulator_transcript.csv
 
