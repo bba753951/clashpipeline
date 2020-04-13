@@ -9,7 +9,7 @@ This program need to use "trim_galore","bowtie","RNAup","RNAfold" program.
 You can choose one of following options to intall these programs.
 ## 1. Install from script
 ```shell=
-bash INSTALL.sh
+./INSTALL.sh
 ```
 ## 2. Install by docker 
 ubuntu:16.04

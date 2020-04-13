@@ -32,7 +32,7 @@ if [ ! -x "$(which wget)" ]; then
     exit 1
 fi
 
-# wget
+# zip
 if [ ! -x "$(which zip)" ]; then
     echo "you need to install zip"
     echo 'try "sudo apt-get install zip"'
@@ -97,7 +97,10 @@ fi
 
 
 # bowtie
-if [ -x "$(which bowtie)" ]; then
+#if [ -x "$(which bowtie)" ]; then
+#Bcz bowtie-1.0.0 can't not use --thresds
+#force user to download bowtie-1.2.3
+if [ ! true ]; then
     echo "bowtie is already installed"
 else
     echo "install bowtie"
