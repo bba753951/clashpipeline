@@ -99,6 +99,7 @@ if [ "$sReadcount" != "None" ];then
     echo "choose read count >= $sReadcount"
     selectBigger read_count $sReadcount $infile $infile_sc
 else
+    echo "not choose read count"
     cp $infile $infile_sc
 fi
 
@@ -118,6 +119,7 @@ if [ "$sRnaScore" != "None" ];then
     selectSmaller RNAfold_MFE $sRnaScore $infile_fold $outfile
     rm $infile_fold
 else
+    echo "not choose RNAfold_MFE"
     mv $infile_fold $outfile
 fi
 
