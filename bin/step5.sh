@@ -22,7 +22,7 @@ fi
 #-----------------------------------
 sRnaScore=None
 outfile=step5.csv
-gflag=None
+GU_score=None
 pflag=None
 
 
@@ -50,8 +50,9 @@ Options:
 
     -g use "GU target algorithm" or not
        only for "regulator = piRNA" or "sequence length=21"
-       default None
-       1 for use
+       default None 
+       if not None,you need to give a score ,then you will use "GU targeting algorithm"
+       And select the 
        if you want to use this option,make sure you have already installed "python3"
        (inclue "numpy" and "pandas")
 
@@ -83,7 +84,7 @@ do
             sRnaScore=$OPTARG
             ;;
         g)
-            gflag=$OPTARG
+            GU_score=$OPTARG
             ;;
         p)
             pflag=$OPTARG
@@ -168,12 +169,17 @@ else
 fi
 
 
-if [ "$gflag" = "1" ];then
+if [ "$GU_score" != "None" ];then
 
     echo ----------- use GU -------------
     time python3 ${shell_parent}/GU_targeting_algorithm/self_gu.py ${temp_path}/temp.csv 
-    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  ${temp_path}/temp_gu.csv|cut -d, -f $RNA_seq --complement > $outfile
-    rm ${temp_path}/temp.csv ${temp_path}/temp_gu.csv
+
+    echo ---------- remove transcript sequence -----------------
+    LC_ALL=C sort -t, -k ${remain_col}.7n -k ${RNA_col}.11n -k ${RNApos_col}n  ${temp_path}/temp_gu.csv|cut -d, -f $RNA_seq --complement > ${temp_path}/temp_gu1.csv
+
+    echo "choose GU_targeting_score >= $GU_score"
+    selectBigger GU_targeting_score $GU_score ${temp_path}/temp_gu1.csv $outfile
+    rm ${temp_path}/temp.csv ${temp_path}/temp_gu.csv ${temp_path}/temp_gu1.csv
 
 else 
     echo ----------- not use GU -------------
