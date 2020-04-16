@@ -197,16 +197,12 @@ else
     rm ${temp_path}/t.csv
 fi
 
+# hybrid to target pair
+echo "hybrid_seq,target_pair_sum,target_pair_name" > ${out}_hybrid_transcript.csv
+awk -F, -v hyb=$reference_col -v reg=$input_col -v tran=$RNA_col -f ${shell_folder}/hybrid_target.awk $outfile| LC_ALL=C sort -u|sed '1i new line'|awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk |LC_ALL=C sort >> ${out}_hybrid_transcript.csv
 
-echo "hybrid_seq,transcript_sum,transcript_name" > ${out}_hybrid_transcript.csv
-if [ $reference_col -lt $RNA_col ];then
-    cut -d, -f $reference_col,$RNA_col $outfile|sed '1d' |LC_ALL=C sort -u|sed '1i new line'|awk -F, -v key=1 -v value=2 -f ${shell_folder}/key_value.awk |LC_ALL=C sort >> ${out}_hybrid_transcript.csv
-else
-    cut -d, -f $reference_col,$RNA_col $outfile|sed '1d' |LC_ALL=C sort -u|sed '1i new line'|awk -F, -v key=2 -v value=1 -f ${shell_folder}/key_value.awk |LC_ALL=C sort >> ${out}_hybrid_transcript.csv
-fi
 
 echo "transcript_name,regulator_sum,regulator_name" > ${out}_transcript_regulator.csv
-
 # join also need LC_ALL
 cut -d, -f $tran_col $tranfile|sed '1d'|LC_ALL=C sort -t, -k 1,1 |LC_ALL=C join -t, -a 1 -e 0 -o 1.1,2.2,2.3 - ${temp_path}/temp_transcript_regulator.csv >> ${out}_transcript_regulator.csv
 
