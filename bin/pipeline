@@ -251,7 +251,7 @@ cut -d, -f $reg_col $regfile > ${original_name}/$base_reg
 echo ====================Analysis start====================
 echo $temp_path
 
-if [ ! $adaptor -o ];then
+if [ ! $adaptor ];then
     time bash ${shell_folder}/step1.sh -i $fastqfile -o ${temp_path}/step1.csv -l $read_len
 elif [ "$adaptor" = "None" ];then
     time bash ${shell_folder}/step1.sh -i $fastqfile -o ${temp_path}/step1.csv -l $read_len
